@@ -27,6 +27,11 @@ const userSchema = new Schema({
         min: [8, "Password must be at least of 8 characters"],
         max: [20, "Password must be at most of 20 characters"],
     },
+    bio: {
+        type: String,
+        min: [10, "minimum 10 character are required"],
+        max: [800, "maximum 800 charachters can be added"]
+    },
     refreshToken: {
         type: String,
     },
