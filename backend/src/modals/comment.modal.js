@@ -12,6 +12,10 @@ const commentSchema = new Schema({
     post: {
         type: Schema.Types.ObjectId,
         ref: 'Post',
+    },
+    tweet: {
+        type: Schema.Types.ObjectId,
+        ref: 'Tweet',
     }
 }, {
     timestamps: true
