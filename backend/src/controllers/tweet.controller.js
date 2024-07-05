@@ -132,10 +132,10 @@ const getTweetByUsenameOrContent = asyncHandler( async(req, res) => {
 })
 
 const getUserTweets = asyncHandler( async(req, res) => {
-    const { username } = req.params;
+    const { userId } = req.params;
     const { limit = 10 , page = 1 } = req.query;
     const tweets = await Tweet.find({ 
-        owner: username 
+        owner: userId 
     }).sort({ 
         createdAt: -1 
     })
