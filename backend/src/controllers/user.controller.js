@@ -5,26 +5,25 @@ import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import jwt from "jsonwebtoken"
 
-const generateAccessAndRefreshToken = asyncHandler( async(userId) => {
+const generateAccessAndRefreshToken = async(userId) => {
     try {
         const user = await User.findById(userId)
+
         const accessToken = user.generateAccessToken()
         const refreshToken = user.generateRefreshToken()
+
         user.refreshToken = refreshToken
         await user.save({
             validateBeforeSave: false
         })
-        return {
-            accessToken,
-            refreshToken
-        }
+        return { accessToken, refreshToken }
     } catch (error) {
         throw new ApiError({
             status: 500,
             message: "Internal Server Error"
         })
     }
-})
+}
 
 const userRegister = asyncHandler( async(req, res) => {
     const { username, fullname, email, password } = req.body
@@ -38,11 +37,8 @@ const userRegister = asyncHandler( async(req, res) => {
             message: "All fields are required"
         })
     }
-    const checkUserExist = User.findOne({
-        $or: [
-            { username },
-            { email }
-        ]
+    const checkUserExist = await User.findOne({
+        $or: [ { username }, { email } ]
     })
     if(checkUserExist) {
         throw new ApiError({
@@ -59,19 +55,19 @@ const userRegister = asyncHandler( async(req, res) => {
         coverImageLocalPath = req.files.coverImage[0].path
     }
     //  upload on cloudinary
-    const avatar = uploadOnCloudinary(avatarLocalPath)
-    const coverImage = uploadOnCloudinary(coverImageLocalPath)
+    const avatar = await uploadOnCloudinary(avatarLocalPath)
+    const coverImage = await uploadOnCloudinary(coverImageLocalPath)
     
-    const user = User.create({
+    const user = await User.create({
         username: username,
         fullname: fullname,
         email: email,
         password: password,
         bio: "",
-        avatar: avatar.url || '',
-        coverImage: coverImage.url || '',
+        avatar: avatar?.url || '',
+        coverImage: coverImage?.url || '',
     })
-    const createdUser = User.findById(user._id).select("-password -refreshToken")
+    const createdUser = await User.findById(user._id).select("-password -refreshToken")
     if(!createdUser){
         throw new ApiError({
             status: 400,
@@ -95,24 +91,24 @@ const userLogin = asyncHandler( async(req, res) => {
             message: "Please provide email or username"
         })
     }
-    const userExist = await User.findOne({ 
+    const user = await User.findOne({ 
         $or: [{ email }, { username }] 
     })
-    if(!userExist) {
+    if(!user) {
         throw new ApiError({
             status: 400,
             message: "Invalid credentials user does not exist"
         })
     }
-    const isPasswordCorrect = await userExist.isPasswordCorrect(password)
+    const isPasswordCorrect = await user.isPasswordCorrect(password)
     if(!isPasswordCorrect) {
         throw new ApiError({
             status: 400,
             message: "Invalid credentials password does not match"
         })
     }
-    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(userExist._id)
-    const user = await User.findById(userExist._id).select("-password -refrehToken")
+    const {accessToken, refreshToken} = await generateAccessAndRefreshToken(user._id)
+    const loggedInUser = await User.findById(user._id).select("-password -refrehToken")
 
     // send cookies
     const options = {
@@ -125,7 +121,7 @@ const userLogin = asyncHandler( async(req, res) => {
     .json(new ApiResponse({
         status: 200,
         message: "User logged in successfully",
-        data: user
+        data: loggedInUser, accessToken, refreshToken
     }))
 })
 
@@ -155,7 +151,7 @@ const userLogout = asyncHandler( async(req, res) => {
 })
 
 const refreshAccesstoken = asyncHandler( async(req, res) => {
-    const incomingRefreshToken = req.cookie.refreshToken || req.body.refreshToken;
+    const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
     if(!incomingRefreshToken) {
         throw new ApiError({
             status: 400,
@@ -171,8 +167,8 @@ const refreshAccesstoken = asyncHandler( async(req, res) => {
                 message: "Invalid RefeshToken"
             })
         }
-        if(incomingRefreshToken !== user.refreshToken){
-            throw new ApiError({
+        if(incomingRefreshToken !== user?.refreshToken){
+            new ApiError({
                 status: 400,
                 message: "Refresh Token is Expired"
             })
@@ -188,7 +184,7 @@ const refreshAccesstoken = asyncHandler( async(req, res) => {
         .json(new ApiResponse({
             status: 200,
             message: "Refresh Token Generated Successfully",
-            data :{
+            data: {
                 accessToken: accessToken,
                 refreshToken: newRefreshToken
             }
@@ -280,7 +276,9 @@ const updateUserAvatar = asyncHandler( async(req, res) => {
         })
     }
     // delete old avatar
-    await deleteFromCloudinary(oldAvatarUrl)
+    if(oldAvatarUrl){
+        await deleteFromCloudinary(oldAvatarUrl)
+    }
 
     const avatar = await uploadOnCloudinary(avatarLocalPath)
     if(!avatar.url){
@@ -352,15 +350,12 @@ const updateUserCoverImage = asyncHandler( async(req, res) => {
 const getUserProfile = asyncHandler( async(req, res) => {
     const { username } = req.params;
     if(!username.trim()){
-        throw new ApiError({
-            status: 400,
-            message: "Please provide a username"
-        })
+        throw new ApiError(400, "Please provide a username")
     }
-    const profile = User.aggregate([
+    const profile = await User.aggregate([
         {
             $match: {
-                username: username?.toLoweCase()
+                username: username?.toLowerCase()
             }
         },
         {
@@ -382,7 +377,7 @@ const getUserProfile = asyncHandler( async(req, res) => {
         {
             $addFields: {
                 followers: {
-                    $size: "$followers",
+                    $size: "$followers"
                 },
                 following: {
                     $size: "$following"
@@ -390,7 +385,7 @@ const getUserProfile = asyncHandler( async(req, res) => {
                 isFollowing: {
                     $cond: {
                         if: {
-                            $in: [req.user._id, "$followers.subscriber"]   
+                            $in: [req.user?._id, "$followers.subscriber"]   
                         },
                         then: true,
                         else: false
@@ -414,10 +409,7 @@ const getUserProfile = asyncHandler( async(req, res) => {
         }
     ])
     if(!profile.length){
-        throw new ApiError({
-            status: 404,
-            message: "User Profile not found"
-        })
+        throw new ApiError(404, "User Profile not found")
     }
     return res.status(200)
     .json(

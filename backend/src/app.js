@@ -34,7 +34,7 @@ import categoryRouter from "./routes/category.routes.js"
 import subscriptionRouter from "./routes/subscription.routes.js"
 
 // routes usage
-app.use('/api/v1/users', userRouter)
+app.use('/api/v1/user', userRouter)
 app.use('/api/v1/post', postRouter)
 app.use('/api/v1/tweet', tweetRouter)
 app.use('/api/v1/like', likeRouter)

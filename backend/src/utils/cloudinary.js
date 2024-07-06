@@ -11,9 +11,7 @@ cloudinary.config({
 
 const uploadOnCloudinary = async(localFilePath) => {
     try {
-        if(!localFilePath){
-            throw new ApiError(400, "No file was provided")
-        }
+        if(!localFilePath) return null
         const result = await cloudinary.uploader.upload(localFilePath, {
             resource_type: "auto"
         })
@@ -23,7 +21,7 @@ const uploadOnCloudinary = async(localFilePath) => {
         return result;
     } catch (error) {
         fs.unlinkSync(localFilePath)
-        return new ApiError(500, "Error while uploading image")
+        return null
     }
 }
 

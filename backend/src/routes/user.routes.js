@@ -40,6 +40,7 @@ router.route("/logout").post(
 )
 
 router.route("/refresh-token").post(
+    verifyJWT,
     refreshAccesstoken
 )
 
