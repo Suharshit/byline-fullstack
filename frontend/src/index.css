@@ -8,7 +8,7 @@
 
   color-scheme: light dark;
   color: black;
-  background-color: whitesmoke;
+  background-color: #EEEEEE;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -17,9 +17,8 @@
 }
 
 .logo{
-  font-family: "Playwrite GB S", cursive;
-  font-size: 2rem;
-  font-weight: 900;
+  font-family: "Dosis", sans-serif;
+  font-weight: 800;
 }
 
 .poppins-thin {

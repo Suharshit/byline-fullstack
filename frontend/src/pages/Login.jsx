@@ -1,8 +1,11 @@
 import React from 'react'
+import LoginComp from '../components/main/LoginComp'
 
 const Login = () => {
   return (
-    <div>Login</div>
+    <div className='h-full w-screen'>
+      <LoginComp/>
+    </div>
   )
 }
 
