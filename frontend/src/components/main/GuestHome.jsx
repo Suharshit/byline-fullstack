@@ -1,22 +1,47 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import {ReactTyped} from "react-typed"
+import Card from "../ui/Card"
 
 const GuestHome = () => {
+  const navigate = useNavigate()
   return (
     <>
-      <div className="h-full w-screen px-2 flex flex-col items-center justify-center sm:visible md:hidden">
-        <div className='flex flex-col items-center justify-center'>
-          <img src="https://i.pinimg.com/564x/78/4a/8a/784a8a5349eb462ff4e2af22f507fa21.jpg" alt="home-image" className='h-[240px] rounded-xl'/>
-          <h1 className='text-lg font-semibold text-center'>
-            Byline - A Blog Writting Website
+      <div className='flex min-h-screen w-full justify-between pt-20'>
+        <div className='space-y-2'>
+          <h1 className='text-6xl font-bold logo'>
+            Welcome!
           </h1>
-          <p className='text-md text-gray-600 text-center'>
-          Find your voice, share your story, <br /> Travel, Growth, and Development 
+          <p className='text-2xl pl-1'>
+          What's on your mind? <br /> Let's discuss it here at <strong><q>Byline</q></strong>.
           </p>
+          <p>
+            <ReactTyped
+              strings={[
+                "Connected", 
+                "Collaborative",
+                "Inclusive"
+              ]}
+              typeSpeed={40}
+              backSpeed={40}
+              loop
+              className='text-2xl mx-1 font-semibold'
+            />
+          </p>
+          <button className='text-lg flex-col flex bg-[#6528F7] text-[#EDE4FF] px-6 py-2 rounded-xl font-semibold w-[155px]' onClick={() => navigate('/login')}>Get Started</button>
         </div>
-        <Link to={"/login"} className='bg-[#D65A31] w-[80%] h-[50px] flex items-center justify-center text-[#EEEEEE] rounded-xl bottom-4 absolute'>
-          <h1>Get Started!</h1>
-        </Link>
+        <div>
+        <img src="https://static.vecteezy.com/system/resources/previews/004/491/051/original/blogging-concept-for-web-banner-man-blogger-writes-article-and-publishes-new-post-in-blog-for-followers-modern-person-scene-illustration-in-flat-cartoon-design-with-people-characters-vector.jpg" alt="" className='w-[700px] rounded-2xl shadow-2xl'/>
+        </div>
+      </div>
+      <div className='min-h-screen w-full space-y-10 flex flex-col items-center'>
+        <h1 className='text-center text-3xl font-semibold'>Top Articles</h1>
+        <div className='grid grid-cols-2 gap-x-28 gap-y-20 '>
+          <Card/>
+          <Card/>
+          <Card/>
+          <Card/>
+        </div>
       </div>
     </>
   )

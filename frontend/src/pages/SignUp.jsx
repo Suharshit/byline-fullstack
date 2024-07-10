@@ -3,7 +3,7 @@ import SignUpComp from '../components/main/SignUpComp'
 
 const SignUp = () => {
   return (
-    <div className='h-full w-screen'>
+    <div className=''>
       <SignUpComp/>
     </div>
   )

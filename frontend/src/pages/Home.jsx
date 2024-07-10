@@ -7,14 +7,15 @@ const Home = () => {
   const [loggedInUser, setLoggedInUser] = useState(false)
   return (
     <>
-      {
-        loggedInUser ? (
-          <UserHome/>
-        ) : (
-          <GuestHome/>
-        )
-
-      }
+      <div className=''>
+        {
+          loggedInUser ? (
+            <UserHome/>
+          ) : (
+            <GuestHome/>
+          )
+        }
+      </div>
     </>
   )
 }

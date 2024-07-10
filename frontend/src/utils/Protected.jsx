@@ -1,8 +1,25 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
+import { useNavigate } from 'react-router-dom'
 
-const Protected = () => {
-  return (
-    <div>Protected</div>
+const Protected = ({children, authentication = true}) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const navigate = useNavigate()
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if(authentication && isAuthenticated !== authentication){
+      navigate("/login")
+    } else if (!authentication && isAuthenticated !== authentication){
+      navigate("/")
+    }
+    setLoading(false)
+  }, [loading, authentication, navigate])
+  return loading ? (
+    <div>Loading...</div>
+  ) : (
+    <div>
+      {children}
+    </div>
   )
 }
 

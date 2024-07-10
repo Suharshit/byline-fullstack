@@ -3,7 +3,7 @@ import LoginComp from '../components/main/LoginComp'
 
 const Login = () => {
   return (
-    <div className='h-full w-screen'>
+    <div className=''>
       <LoginComp/>
     </div>
   )

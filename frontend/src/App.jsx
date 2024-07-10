@@ -1,18 +1,19 @@
 import { Outlet, useNavigate } from "react-router-dom"
-import GuestNavbar from "./components/header/GuestNavbar"
 import Footer from "./components/footer/Footer"
+import { useState } from "react"
+import UserNavBar from "./components/header/UserNavbar"
 
 function App() {
   return (
     <>
-      <div className="h-screen w-screen relative flex">
-        <div className="top-0 absolute h-14 max-sm:h-24 w-full bg-gray-800 max-sm:px-0 max-sm:py-0 px-2 py-2">
-          <GuestNavbar/>
+      <div className="min-h-screen flex flex-wrap content-between">
+        <div className="h-10 top-0 px-6 my-4 w-full">
+          <UserNavBar/>
         </div>
-        <div className="max-sm:top-24 md:top-20 top-14 bottom-10 absolute">
-          <Outlet/>
+        <div className="top-16 bottom-10 px-6 my-2 w-full">
+          <Outlet />
         </div>
-        <div className="bottom-0 absolute h-10 bg-[#D65A31] w-full flex items-center justify-center">
+        <div className="h-10 bottom-0 items-center justify-center flex w-full bg-[#6528F7] text-[#EDE4FF]">
           <Footer/>
         </div>
       </div>

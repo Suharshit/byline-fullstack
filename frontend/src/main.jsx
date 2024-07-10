@@ -12,6 +12,7 @@ import Settings from "./pages/Settings.jsx"
 import CreatePost from './pages/CreatePost.jsx'
 import Login from './pages/Login.jsx'
 import SignUp from './pages/SignUp.jsx'
+import Protected from './utils/Protected.jsx'
 
 const router = createBrowserRouter([
   {
@@ -24,11 +25,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/search",
-        element: <Search/>,
+        element: (
+          <Protected authentication={true}>
+            <Search />
+          </Protected>
+        ),
       },
       {
         path: "/profile",
-        element: <Profile/>,
+        element: (
+          <Protected authentication={true}>
+            <Profile />
+          </Protected>
+        ),
       },
       {
         path: "*",
@@ -36,23 +45,43 @@ const router = createBrowserRouter([
       },
       {
         path: "/tweets",
-        element: <Tweets/>,
+        element: (
+          <Protected authentication={true}>
+            <Tweets />
+          </Protected>
+        ),
       },
       {
         path: "/settings",
-        element: <Settings/>,
+        element: (
+          <Protected authentication={true}>
+            <Settings />
+          </Protected>
+        ),
       },
       {
         path: "/create",
-        element: <CreatePost/>,
+        element: (
+          <Protected authentication={true}>
+            <CreatePost />
+          </Protected>
+        ),
       },
       {
         path: "/login",
-        element: <Login/>,
+        element: (
+          <Protected authentication={false}>
+            <Login />
+          </Protected>
+        ),
       },
       {
         path: "/signup",
-        element: <SignUp/>,
+        element: (
+          <Protected authentication={false}>
+            <SignUp />
+          </Protected>
+        ),
       }
     ]
   }
