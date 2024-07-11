@@ -2,10 +2,20 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import {ReactTyped} from "react-typed"
 import HomeCard from "../ui/HomeCard"
-import UserCard from '../ui/UserCard'
+import Footer from "../footer/Footer"
+import Slider from "react-slick";
 
 const GuestHome = () => {
   const navigate = useNavigate()
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 800,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    draggable: false
+  };
   return (
     <>
       <div className='flex min-h-screen w-full justify-between pt-20'>
@@ -14,7 +24,7 @@ const GuestHome = () => {
             Welcome!
           </h1>
           <p className='text-2xl pl-1'>
-          What's on your mind? <br /> Let's discuss it here at <strong><q>Byline</q></strong>.
+            What's on your mind? <br /> Let's discuss it here at <strong><q>Byline</q></strong>.
           </p>
           <p>
             <ReactTyped
@@ -37,20 +47,21 @@ const GuestHome = () => {
       </div>
       <div className='min-h-screen w-full space-y-10 flex flex-col items-center mb-10'>
         <h1 className='text-center text-3xl font-semibold'>Top Articles</h1>
-        <div className='grid grid-cols-2 gap-x-28 gap-y-20'>
-          <HomeCard/>
-          <HomeCard/>
-          <HomeCard/>
-          <HomeCard/>
-        </div>
-      </div>
-      <div className='min-h-screen w-full space-y-24 flex items-center flex-col mb-10'>
-        <h1 className='text-center pt-10 text-3xl font-semibold'>Top Authors</h1>
-        <div className='grid grid-cols-4 grid-rows-1 gap-x-16'>
-          <UserCard/>
-          <UserCard/>
-          <UserCard/>
-          <UserCard/>
+        <div className='w-[90%] flex flex-col h-[80%] justify-center pt-12'>
+          <Slider {...settings} dotsClass="slick-dots">
+            <div className='px-4'>
+              <HomeCard/>
+            </div>
+            <div className='px-4'>
+              <HomeCard/>
+            </div>
+            <div className='px-4'>
+              <HomeCard/>
+            </div>
+            <div className='px-4'>
+              <HomeCard/>
+            </div>
+          </Slider>
         </div>
       </div>
       <div className='h-screen pt-12 space-y-10'>
@@ -69,6 +80,9 @@ const GuestHome = () => {
             <div className='h-28 rounded-2xl backdrop-blur-sm bg-white/65 w-28 absolute bottom-8 right-5 opacity-65'></div>
           </div>
         </div>
+      </div>
+      <div>
+        <Footer/>
       </div>
     </>
   )

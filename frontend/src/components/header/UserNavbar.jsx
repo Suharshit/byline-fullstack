@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 const UserNavbar = () => {
-  const authStatus = false
+  const authStatus = true
   const navItems = [
     {
       name: 'Home',
@@ -15,6 +15,11 @@ const UserNavbar = () => {
       active: !authStatus
     },
     {
+      name: 'Tweets',
+      path: '/tweets',
+      active: authStatus
+    },
+    {
       name: 'Create',
       path: '/create',
       active: authStatus
@@ -22,11 +27,6 @@ const UserNavbar = () => {
     {
       name: 'Profile',
       path: '/profile',
-      active: authStatus
-    },
-    {
-      name: 'Tweets',
-      path: '/tweets',
       active: authStatus
     }
   ]

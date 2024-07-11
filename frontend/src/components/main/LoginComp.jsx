@@ -5,8 +5,19 @@ import { Link } from "react-router-dom"
 const LoginComp = () => {
   return (
     <>
-      <div className="min-h-[450px] bg-gray-800">
-        <h1>Log in</h1>
+      <div className="h-full w-full flex flex-col items-center justify-center space-y-5">
+        <div className="flex text-5xl items-center">
+          <img src="/public/assets/Untitled.png" alt="logo" className="h-[70px] w-[50px] rounded-xl"/>
+          <h1 className="logo">Byline</h1>
+        </div>
+        <div className="flex flex-col items-center space-y-4">
+          <h1 className="text-3xl logo">Login</h1>
+          <div className="space-y-4">
+            <Input label={"Email"} placeholder={"user@example.com"} className={"bg-white text-black"}/>
+            <Input label={"Password"} placeholder={"password"} className={"bg-white text-black"}/>
+            <Button children={"Submit"} className="bg-[#A555EC] hover:bg-[#5d3085]"/>
+          </div>
+        </div>
       </div>
     </>
   )

@@ -4,7 +4,7 @@ import GuestHome from "../components/main/GuestHome"
 
 
 const Home = () => {
-  const [loggedInUser, setLoggedInUser] = useState(false)
+  const [loggedInUser, setLoggedInUser] = useState(true)
   return (
     <>
       <div className=''>

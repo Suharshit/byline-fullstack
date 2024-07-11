@@ -13,6 +13,7 @@ import CreatePost from './pages/CreatePost.jsx'
 import Login from './pages/Login.jsx'
 import SignUp from './pages/SignUp.jsx'
 import Protected from './utils/Protected.jsx'
+import AuthLayout from './pages/AuthLayout.jsx'
 
 const router = createBrowserRouter([
   {
@@ -66,24 +67,28 @@ const router = createBrowserRouter([
             <CreatePost />
           </Protected>
         ),
-      },
-      {
-        path: "/login",
-        element: (
-          <Protected authentication={false}>
-            <Login />
-          </Protected>
-        ),
-      },
-      {
-        path: "/signup",
-        element: (
-          <Protected authentication={false}>
-            <SignUp />
-          </Protected>
-        ),
       }
     ]
+  },
+  {
+    path: "/login",
+    element: (
+      <Protected authentication={false}>
+        <AuthLayout>
+          <Login />
+        </AuthLayout>
+      </Protected>
+    ),
+  },
+  {
+    path: "/signin",
+    element: (
+      <Protected authentication={false}>
+        <AuthLayout>
+          <SignUp />
+        </AuthLayout>
+      </Protected>
+    ),
   }
 ])
 

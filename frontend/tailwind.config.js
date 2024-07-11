@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const plugin = require('tailwindcss/plugin');
 export default {
   content: [
     "./index.html",
@@ -14,6 +15,10 @@ export default {
       '2xl': '1536px',
     }
   },
-  plugins: [],
+  plugins: [
+    plugin(function({ addVariant }) {
+      addVariant('current','&.active');
+    })
+  ],
 }
 
