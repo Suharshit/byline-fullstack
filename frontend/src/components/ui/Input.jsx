@@ -9,9 +9,9 @@ const Input = ({
 }, ref) => {
     const id = useId()
   return (
-    <div className='flex flex-col h-[80px] w-[340px] mt-1'>
+    <div className='flex flex-col h-[80px] mt-1'>
         {
-            label && <label className="form-label text-xl font-semibold px-2">{label}</label>
+            label && <label className="form-label text-xl font-semibold">{label}</label>
         }
         <input 
           type={type}  

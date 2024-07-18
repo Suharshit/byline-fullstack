@@ -10,7 +10,7 @@ const Button = ({
     <div>
       <button 
       type={type} 
-      className={`${className} h-[45px] w-[340px] rounded-xl mt-4 text-[#EEEEEE]`} 
+      className={`${className} h-[45px] rounded-xl mt-4 text-[#EEEEEE]`} 
       {...props}>
         {children}
       </button>

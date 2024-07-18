@@ -14,6 +14,12 @@ import Login from './pages/Login.jsx'
 import SignUp from './pages/SignUp.jsx'
 import Protected from './utils/Protected.jsx'
 import AuthLayout from './pages/AuthLayout.jsx'
+import { Provider } from 'react-redux'
+import store from './store/store.js'
+import CreateTweet from "./pages/CreateTweet.jsx"
+import SearchTweet from "./pages/SearchTweet.jsx"
+import Post from './pages/Post.jsx'
+import AuthProtection from './utils/AuthProtection.jsx'
 
 const router = createBrowserRouter([
   {
@@ -22,35 +28,39 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home/>,
+        element: <Home/>
       },
       {
-        path: "/search",
-        element: (
-          <Protected authentication={true}>
-            <Search />
-          </Protected>
-        ),
-      },
-      {
-        path: "/profile",
-        element: (
-          <Protected authentication={true}>
-            <Profile />
-          </Protected>
-        ),
+        path: "/tweets",
+        element: <Tweets/>
       },
       {
         path: "*",
         element: <ErrorPage/>,
       },
       {
-        path: "/tweets",
+        path: "/create-tweet",
         element: (
           <Protected authentication={true}>
-            <Tweets />
+            <CreateTweet />
           </Protected>
         ),
+      },
+      {
+        path: "/search-tweet",
+        element: (
+          <Protected authentication={false}>
+            <SearchTweet />
+          </Protected>
+        ),
+      },
+      {
+        path: "/search",
+        element: <Search />
+      },
+      {
+        path: "*",
+        element: <ErrorPage/>,
       },
       {
         path: "/settings",
@@ -58,7 +68,7 @@ const router = createBrowserRouter([
           <Protected authentication={true}>
             <Settings />
           </Protected>
-        ),
+        )
       },
       {
         path: "/create",
@@ -69,6 +79,22 @@ const router = createBrowserRouter([
         ),
       }
     ]
+  },
+  {
+    path: "/article/:id",
+    element: (
+      <AuthProtection authentication={true}>
+        <Post />
+      </AuthProtection>
+    )
+  },
+  {
+    path: "/profile/:id",
+    element: (
+      <AuthProtection authentication={true}>
+        <Profile />
+      </AuthProtection>
+    ),
   },
   {
     path: "/login",
@@ -93,7 +119,8 @@ const router = createBrowserRouter([
 ])
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  <Provider store={store}>
     <RouterProvider router={router}/>
-  </React.StrictMode>,
+  </Provider>
+
 )

@@ -22,6 +22,7 @@ router.route("/add-post").post(
 
 router.route("/update-post/:postId").patch(
     verifyJWT,
+    upload.single("image"),
     updatePost
 )
 
@@ -48,7 +49,7 @@ router.route("/all-posts").get(
     getAllPosts
 )
 
-router.route("/posts/:category").get(
+router.route("/posts/:categoryId").get(
     getPostsByCategory
 )
 

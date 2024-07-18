@@ -6,7 +6,11 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      bg: {
+        "authBg": "url('/public/assets/auth bg.jpg')"
+      }
+    },
     screens: {
       'sm': '640px',
       'md': '768px',

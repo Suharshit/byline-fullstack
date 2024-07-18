@@ -16,19 +16,19 @@ const createPost = asyncHandler( async(req, res) => {
     if(!category){
         throw new ApiError(400, "Category is required");
     }
-    let postImageLocalPath;
-    if(req.file && req.file.postImage){
-        postImageLocalPath = req.file.postImage;
+    const postImageLocalPath = req.file?.path
+    if(!postImageLocalPath){
+        throw new ApiError(400, "Post image is required");
     }
     const postImage = await uploadOnCloudinary(postImageLocalPath)
-    if(!postImage){
+    if(!postImage.url){
         throw new ApiError(400, "Image upload failed")
     }
     const post = await Post.create({
         title,
         description,
         content,
-        image: postImage || "",
+        image: postImage.url,
         author: req.user,
         category: category
     })
@@ -57,6 +57,14 @@ const updatePost = asyncHandler( async(req, res) => {
     if(!postId){
         throw new ApiError(400, "Post id is required")
     }
+    const postImageLocalPath = req.file?.path
+    if(!postImageLocalPath){
+        throw new ApiError(400, "Post image is required");
+    }
+    const postImage = await uploadOnCloudinary(postImageLocalPath)
+    if(!postImage.url){
+        throw new ApiError(400, "Image upload failed")
+    }
     const post = await Post.findByIdAndUpdate(
         postId,
         {
@@ -64,6 +72,7 @@ const updatePost = asyncHandler( async(req, res) => {
                 title: title,
                 description: description,
                 content: content,
+                image: postImage.url,
                 category: category
             }
         },
@@ -97,7 +106,13 @@ const deletePost = asyncHandler( async(req, res) => {
 
 const getPostById = asyncHandler( async(req, res) => {
     const { postId } = req.params;
-    const post = await Post.findById(postId);
+    const post = await Post.findById(postId).populate({
+        path: "author",
+        select: "username avatar"
+    }).populate({
+        path: "category",
+        select: "name"
+    })
     if(!post){
         throw new ApiError(404, "Post not found")
     }
@@ -135,7 +150,13 @@ const getAllPosts = asyncHandler( async(req, res) => {
     const { page = 1, limit = 10 } = req.query
     const posts = await Post.find().sort({ createdAt: -1 }).limit(limit).skip(
         page * limit - limit
-    )
+    ).populate({
+        path: "author",
+        select: "username avatar",
+    }).populate({
+        path: "category",
+        select: "name",
+    })
     if(!posts){
         throw new ApiError(404, "No posts found")
     }
@@ -146,13 +167,19 @@ const getAllPosts = asyncHandler( async(req, res) => {
 })
 
 const getPostsByCategory = asyncHandler( async(req, res) => {
-    const { category } = req.params;
-    if(!category){
+    const { categoryId } = req.params;
+    if(!categoryId){
         throw new ApiError(404, "No category found")
     }
-    const posts = await Post.find({ category: category }).sort(
+    const posts = await Post.find({ category: categoryId }).sort(
         { createdAt: -1 }
-    )
+    ).populate({
+        path: "author",
+        select: "username avatar",
+    }).populate({
+        path: "category",
+        select: "name",
+    })
     if(!posts){
         throw new ApiError(404, "No posts found")
     }

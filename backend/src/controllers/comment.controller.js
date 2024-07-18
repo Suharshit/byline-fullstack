@@ -70,8 +70,10 @@ const getPostComments = asyncHandler( async(req, res) => {
     const comments = await Comment.find({
         post: postId
     }).populate({
-        path: "user",
-        select: "username fullname avatar email"
+        path: "owner",
+        select: "username avatar"
+    }).sort({
+        createdAt: -1
     })
     if(!comments){
         throw new ApiError(400, "No comments found")
