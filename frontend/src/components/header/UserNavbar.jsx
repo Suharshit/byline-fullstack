@@ -8,6 +8,7 @@ import { logout } from "../../store/authSlice"
 
 const UserNavbar = () => {
   const authStatus = useSelector((state) => state.auth.status)
+  const userData = useSelector((state) => state.auth.userData)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const navItems = [
@@ -15,7 +16,7 @@ const UserNavbar = () => {
       name: 'Login',
       path: '/login',
       active: !authStatus
-    },
+    }
   ]
 
   const userLogout = () => {
@@ -52,7 +53,12 @@ const UserNavbar = () => {
         </ul>
         {
           authStatus ? (
-            <Button children={"Logout"} className='text-xl font-semibold mb-4 px-4 bg-[#6528F7]' onClick={() => userLogout()}/>
+            <>
+              <Button children={"Logout"} className='text-xl font-semibold mb-4 px-4 bg-[#6528F7]' onClick={() => userLogout()}/>
+              <Link to={`/profile/${userData?.resData.username}`} className='border-l-2 border-zinc-600 pl-2'>
+                <img src={userData?.resData.avatar || "https://i.pinimg.com/236x/17/04/53/170453c5eb46d7e376807032b550a65b.jpg"} alt={userData?.resData.username} className='h-12 w-12 rounded-full border-full'/>
+              </Link>
+            </>            
           ) : (
             null
           )

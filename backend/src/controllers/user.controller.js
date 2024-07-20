@@ -349,7 +349,7 @@ const updateUserCoverImage = asyncHandler( async(req, res) => {
 
 const getUserProfile = asyncHandler( async(req, res) => {
     const { username } = req.params;
-    if(!username.trim()){
+    if(!username){
         throw new ApiError(400, "Please provide a username")
     }
     const profile = await User.aggregate([

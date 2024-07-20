@@ -6,7 +6,7 @@ const RTE = ({
     control,
     name,
     label,
-    defaultvalue = '<h1>Hello write what every you want</h1>'
+    defaultvalue = '<h1>Write article content here...</h1>'
 }) => {
   return (
     <div className='pb-10'>

@@ -66,16 +66,16 @@ const Post = () => {
               <h1 className='text-5xl font-bold px-2 border-b-2 border-zinc-600 pb-2'>{post?.title}</h1>
               <img src={post?.image} alt={post?.title} className='h-[470px] rounded-xl border-2 shadow-lg shadow-black'/>
             </div>
-            <div className='pt-3'>
+            <div className='pt-3 px-3'>
               <div className='flex justify-between pr-4'>
-                <p className='text-lg font-semibold pr-3'>{post?.description}</p>
-                <p className='bg-[#6528F7]/45 w-fit px-4 py-2 rounded-full ml-3'>{post?.category.name}</p>
+                <p className='text-lg font-semibold pr-3 px-2 py-2 bg-zinc-900 rounded-lg'>{post?.description}</p>
+                <p className='bg-[#6528F7]/45 w-fit px-4 py-2 rounded-full ml-3 '>{post?.category.name}</p>
               </div>
               <span>
                 {parse(`${post?.content}`)}
               </span>
             </div>
-            <Link to={`/profile/${post?.author._id}`} className='h-20 w-full flex justify-between pr-5 mb-6'>
+            <Link to={`/profile/${post?.author.username}`} className='h-20 w-full flex justify-between pr-5 mb-6'>
               <div className='flex h-auto items-center space-x-3'>
                 <img src={post?.author.avatar} alt={post?.author.username} className='h-16 rounded-full'/>
                 <h1 className='text-xl font-bold'>
@@ -90,6 +90,13 @@ const Post = () => {
                 )
               }
             </Link>
+            { userData?.id === post?.author.id ? (
+              <div className='mb-3'>
+              <Link to={`/edit-article/${post?._id}`} className='bg-[#6528F7] px-6 py-2 text-xl font-bold rounded-lg'>
+                Edit
+              </Link>
+            </div>) : (null)
+            }
             <div>
               <h1 className='text-2xl font-bold border-t-2 border-zinc-700'>Comments:</h1>
               <div className='mt-2 w-full pr-5'>

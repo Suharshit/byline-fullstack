@@ -40,7 +40,7 @@ router.route("/search-post").get(
     seachPosts
 )
 
-router.route("/user-posts/:postId").get(
+router.route("/user-posts/:userId").get(
     verifyJWT,
     getUserPosts
 )

@@ -142,7 +142,10 @@ const getUserTweets = asyncHandler( async(req, res) => {
     .limit(limit)
     .skip(
         (page - 1) * limit
-    )
+    ).populate({
+        path: "owner",
+        select: "username avatar"
+    })
     if(!tweets){
         throw new ApiError(400, "Tweets not found");
     }

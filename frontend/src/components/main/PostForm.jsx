@@ -36,17 +36,16 @@ const PostForm = ({post}) => {
           console.log(res)
         })
       } else {
-        const postId = post._id
         const formData = new FormData()
         formData.append("title", data.title)
         formData.append("content", data.content)
         formData.append("description", data.description)
-        formData.append("author", data.author)
         formData.append("image", image.data)
         formData.append("category", data.category)
-        axios.post(`/v1/post/update-post/${postId}`, formData).then((res) => {
+        axios.patch(`/v1/post/update-post/${post?._id}`, formData).then((res) => {
           console.log(res)
         })
+        
       }
     }
     const handleFileChange = (e) => {
@@ -98,20 +97,20 @@ const PostForm = ({post}) => {
                   onChange={handleFileChange}
               />
               {image.preveiw && (
-                <img src={image.preveiw} alt="preview" className='w-44 h-44'/>
+                <img src={image.preveiw} alt="preview" className='w-44 h-44 rounded-lg'/>
               )}
-              <Select
-                label={"Category: "}
-                {...register("category", {required: !post})}
-                className={'outline-none bg-zinc-600'}
-                options={category}
-              />
                 { post && (
-                  <div className='h-44 w-44 bg-white'>
+                  <div className='h-[280px] w-[400px] mb-3'>
                     <img src={post?.image} alt={post?.title}
-                      className="max-h-72"/>                    
+                      className="h-[250px] w-[340px] rounded-xl"/>                    
                   </div>
                 )}
+                <Select
+                  label={"Category: "}
+                  {...register("category", {required: !post})}
+                  className={'outline-none bg-zinc-600 rounded-xl w-44 px-1 py-2'}
+                  options={category}
+                />
                 <Button children={"Submit"} className='bg-[#6528F7] text-[#EDE4FF] w-full'/>
             </div>
           </form>

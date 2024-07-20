@@ -26,7 +26,7 @@ const HomePostCard = ({
           </div>
         </Link>
         <div className='bottom-3 absolute flex items-center justify-between pr-4 w-full'>
-          <Link to={`/profile/${authorId}`} className='flex items-center gap-x-2'>
+          <Link to={`/profile/${author}`} className='flex items-center gap-x-2'>
             <img src={avatar} alt={author} className='h-16 rounded-full'/>
             <p className='text-lg'>{author}</p>
           </Link>

@@ -18,8 +18,12 @@ import { Provider } from 'react-redux'
 import store from './store/store.js'
 import CreateTweet from "./pages/CreateTweet.jsx"
 import SearchTweet from "./pages/SearchTweet.jsx"
-import Post from './pages/Post.jsx'
+import Post from "./pages/Post.jsx"
 import AuthProtection from './utils/AuthProtection.jsx'
+import UserPosts from './components/main/UserPosts.jsx'
+import UserTweets from './components/main/UserTweets.jsx'
+import UserLikedPosts from './components/main/UserLikedPosts.jsx'
+import EditPost from './pages/EditPost.jsx'
 
 const router = createBrowserRouter([
   {
@@ -89,12 +93,20 @@ const router = createBrowserRouter([
     )
   },
   {
-    path: "/profile/:id",
+    path: "/edit-article/:id",
+    element: (
+      <AuthProtection authentication={true}>
+        <EditPost/>
+      </AuthProtection>
+    )
+  },
+  {
+    path: "/profile/:username",
     element: (
       <AuthProtection authentication={true}>
         <Profile />
       </AuthProtection>
-    ),
+    )
   },
   {
     path: "/login",

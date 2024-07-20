@@ -136,7 +136,13 @@ const seachPosts = asyncHandler( async(req, res) => {
 
 const getUserPosts = asyncHandler( async( req, res ) => {
     const { userId } = req.params;
-    const posts = await Post.find({ author: userId })
+    const posts = await Post.find({ author: userId }).populate({
+        path: "author",
+        select: "username avatar"
+    }).populate({
+        path: "category",
+        select: "name"
+    })
     if(!posts){
         throw new ApiError(404, "No posts found")
     }
