@@ -24,6 +24,8 @@ import UserPosts from './components/main/UserPosts.jsx'
 import UserTweets from './components/main/UserTweets.jsx'
 import UserLikedPosts from './components/main/UserLikedPosts.jsx'
 import EditPost from './pages/EditPost.jsx'
+import Tweet from './pages/Tweet.jsx'
+import EditProfile from './pages/EditProfile.jsx'
 
 const router = createBrowserRouter([
   {
@@ -81,6 +83,14 @@ const router = createBrowserRouter([
             <CreatePost />
           </Protected>
         ),
+      },
+      {
+        path: "/tweet/:id",
+        element: (
+          <Protected authentication={true}>
+            <Tweet/>
+          </Protected>
+        )
       }
     ]
   },
@@ -105,6 +115,14 @@ const router = createBrowserRouter([
     element: (
       <AuthProtection authentication={true}>
         <Profile />
+      </AuthProtection>
+    )
+  },
+  {
+    path: "/edit-profile/:username",
+    element: (
+      <AuthProtection authentication={true}>
+        <EditProfile />
       </AuthProtection>
     )
   },

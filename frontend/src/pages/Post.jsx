@@ -54,6 +54,15 @@ const Post = () => {
   const userData = useSelector((state) => state.auth.userData)
   // console.log(userData);
 
+  if(!userLoggedIn){
+    return (
+      <div className='flex-col items-center justify-center px-12 py-5'>
+        <h1>To Continue Please Log In</h1>
+        <Link to={"/login"} className='px-3 py-2 bg-zinc-900 text-white font-bold'>Login</Link>
+      </div>
+    )
+  }
+
   return userLoggedIn ? (
     <>
       <div className='h-full w-full flex'>
@@ -149,7 +158,7 @@ const Post = () => {
     </>
   ) : (
     <div>
-      Log In to veiw the post
+      Loading...
     </div>
   )
 }

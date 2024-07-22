@@ -7,6 +7,8 @@ import { ChevronLeftIcon } from "@radix-ui/react-icons"
 import Button from "../components/ui/Button"
 import HomePostCard from '../components/ui/HomePostCard'
 import HomeTweetCard from '../components/main/HomeTweetCard'
+import ActionButton from '../components/ui/ActionButton'
+import { HeartIcon, HeartFilledIcon, ChatBubbleIcon} from "@radix-ui/react-icons"
 
 const Profile = () => {
   const { username } = useParams()
@@ -17,7 +19,6 @@ const Profile = () => {
   const [inProfileData, setInProfileData] = useState([])
   const [userPosts, setUserPosts] = useState(true)
   const [userTweets, setUserTweets] = useState(false)
-  const [userLikedPosts, setUserLikedPosts] = useState(false)
 
   useEffect(() => {
     axios.get("/v1/user/current-user").then((res) => {
@@ -47,16 +48,13 @@ const Profile = () => {
 
   const userPostsclick = async() => {
     setUserTweets(false)
-    setUserLikedPosts(false)
     setUserPosts(true)
     await axios.get(`/v1/post/user-posts/${profileData._id}`).then((res) => {
       setInProfileData(res.data.message)
-      // console.log(inProfileData)
     })
   }
   const userTweetsclick = async() => {
     setUserPosts(false)
-    setUserLikedPosts(false)
     setUserTweets(true)
     await axios.get(`/v1/tweet/user-tweets/${profileData._id}`).then((res) => {
       setInProfileData(res.data.message)
@@ -66,10 +64,12 @@ const Profile = () => {
   useEffect(() => {
     setUserPosts(true)
     if(userPosts){
-      axios.get(`/v1/post/user-posts/${profileData?._id}`).then((res) => {
-        setInProfileData(res.data.message)
-        // console.log(inProfileData);
-      })
+      const getUserPosts = async() => {
+          await axios.get(`/v1/post/user-posts/${profileData._id}`).then((res) => {
+          setInProfileData(res.data.message)
+        })
+      }
+      getUserPosts()
     }
   }, [profileData, setInProfileData])
 
@@ -77,7 +77,7 @@ const Profile = () => {
     <>
       <div className='flex w-full px-3 py-2'>
         <Link to={"/"} className='bg-zinc-900 rounded-full p-3 h-fit w-fit'>
-          <ChevronLeftIcon height={45} width={45}/>
+          <ChevronLeftIcon height={38} width={38}/>
         </Link>
         <div className='w-full px-20 py-5'>
           {profileData?.coverImage && <div className='w-full h-[280px] overflow-hidden flex items-center rounded-xl relative'>
@@ -96,6 +96,11 @@ const Profile = () => {
                   <p>{profileData.following} Following</p>
                 </div>
                 <h2 className='text-md text-zinc-400 w-[60%]'>{profileData.bio}</h2>
+                <div className='pt-4'>
+                  <Link to={`/edit-profile/${profileData?.username}`} className='bg-zinc-900 px-8 py-2 rounded-lg font-semibold'>
+                    Edit Profile
+                  </Link>
+                </div>
               </div>
             </div>
             <div className=''>
@@ -125,11 +130,6 @@ const Profile = () => {
                     Tweets
                   </Button>
                 </li>
-                <li>
-                  <Button>
-                    Liked Posts
-                  </Button>
-                </li>
               </ul>
             </div>
             <div className={`${userPosts ? "grid grid-cols-3 w-full pt-10" : "hidden"}`}>
@@ -137,7 +137,7 @@ const Profile = () => {
               (inProfileData.length !== 0 && userPosts) && (
                 inProfileData.map((Post) => {
                   return (
-                    <HomePostCard id={Post?._id} title={Post?.title} description={Post?.description} image={Post?.image} avatar={Post?.author?.avatar} author={Post?.author?.username} authorId={Post?.author?._id}/>
+                    <HomePostCard key={Post?._id} id={Post?._id} title={Post?.title} description={Post?.description} image={Post?.image} avatar={Post?.author?.avatar} author={Post?.author?.username} authorId={Post?.author?._id}/>
                   )
                 }
               ))
@@ -147,9 +147,25 @@ const Profile = () => {
             {
               (inProfileData.length !== 0 && userTweets) && (
                 inProfileData.map((tweet) => {
+                    const likeTweet = () => {
+                      axios.get(`/v1/like/toggle-tweet-like/${tweet?._id}`).then((res) => {
+                        console.log(res.data);
+                        setTweetLike(tweet?.likesCount)
+                      })
+                    } 
                   return (
-                    <div>
+                    <div key={tweet?._id} className='bg-zinc-600 w-[550px] h-fit rounded-xl py-0 px-2'>
                       <HomeTweetCard tweet={tweet}/>
+                      <div className='px-4 flex pb-2 items-center space-x-5'>
+                        <div className='flex space-x-2 pt-2 px-2 border-zinc-900'>
+                            <ActionButton children={!tweet?.isLiked ? <HeartIcon height={25} width={25}/> : <HeartFilledIcon height={25} width={25}/>} className={""} onClickMethod={() => likeTweet()}/>
+                            <p className=''>{tweet?.likesCount}</p>
+                        </div>
+                        <div className='flex space-x-2 pt-2 px-2 border-zinc-900'>
+                            <ActionButton children={<ChatBubbleIcon height={25} width={25}/>}/>
+                            <p className=''>{tweet?.commentsCount}</p>
+                        </div>
+                      </div>
                     </div>
                   )
                 }
