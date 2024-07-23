@@ -7,7 +7,7 @@ const SidePostCard = ({
 }) => {
   return (
     <>
-        <Link to={`/article/${post._id}`} className='h-[200px] bg-zinc-900 rounded-xl flex px-2 py-2 space-x-2 text-white overflow-hidden'>
+        <Link to={`/article/${post._id}`} className='h-[200px] bg-zinc-900 rounded-xl flex px-2 py-2 space-x-2 text-white overflow-hidden mt-4'>
             <img src={post.image} alt={post.title} className='w-[55%] rounded-lg' />
             <div className='flex-col'>
                 <div className='mb-4'>

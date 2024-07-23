@@ -5,10 +5,11 @@ import axios from "axios"
 import { setPosts as Posts } from '../store/postSlice'
 
 const Home = () => {
-  const userLoggedIn = useSelector((state) => state.auth.status)
+  const userData = useSelector((state) => state.auth.userData)
   const dispatch = useDispatch()
-  const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(false)
+  const [posts, setPosts] = useState([])
+  // console.log(userData);
   useEffect(() => {
     setLoading(true)
     axios.get('/v1/post/all-posts').then((res) => {
@@ -17,10 +18,11 @@ const Home = () => {
       setLoading(false)
     })
   }, [setPosts, setLoading])
+  // console.log(userData);
 
   return !loading ? (
     <>
-      <div className='h-full rounded-xl px-2 py-1 grid grid-cols-3 space-x-5'>
+      <div className='h-full w-full rounded-xl py-1 grid grid-cols-3 gap-y-12'>
         {
           posts.map((post) => {
             return (

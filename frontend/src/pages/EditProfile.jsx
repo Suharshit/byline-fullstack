@@ -20,7 +20,7 @@ const EditProfile = () => {
   }, [username, setUserProfileData, setIsLoading])
   return !isLoading ? (
     <div className='py-5'>
-      <div className='flex w-[98vw]  justify-center space-x-5'>
+      <div className='flex w-[90vw] justify-center space-x-5'>
         <Link to={`/profile/${userProfileData.username}`} className='bg-zinc-900 p-1 h-fit w-fit rounded-full'><CaretLeftIcon height={50} width={50}/></Link>
         <ProfileEditForm data={userProfileData}/>
       </div>

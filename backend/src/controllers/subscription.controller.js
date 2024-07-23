@@ -69,6 +69,9 @@ const getUserFollowing = asyncHandler( async(req, res) =>{
     })
     .sort({
         createdAt: -1
+    }).populate({
+        path: "author",
+        select: "username avatar fullname"
     })
     if(!following){
         throw new ApiError(404, "No following found");

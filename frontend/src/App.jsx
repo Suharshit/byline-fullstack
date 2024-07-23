@@ -3,7 +3,7 @@ import Footer from "./components/footer/Footer"
 import { useEffect, useState } from "react"
 import UserNavBar from "./components/header/UserNavbar"
 import axios from "axios"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import {login as authLogin} from "./store/authSlice"
 import HomeSideNavbar from "./components/main/HomeSideNavbar"
 import { HomeIcon, TwitterLogoIcon, MagnifyingGlassIcon, Pencil2Icon } from "@radix-ui/react-icons"
@@ -59,7 +59,7 @@ function App() {
         <div className="w-1/6 fixed">
           <HomeSideNavbar navItems={navItems}/>
         </div>
-        <div className="w-full min-h-screen pl-[275px]">
+        <div className="w-full min-h-screen pl-[275px] mb-10">
           <Outlet/>
         </div>
       </div>

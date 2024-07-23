@@ -69,7 +69,7 @@ const Post = () => {
         <div className=''>
           <Link to={"/"}><ChevronLeftIcon height={55} width={55} className='bg-zinc-900 mt-3 ml-5 rounded-full p-3' /></Link>
         </div>
-        <div className='pr-32 pl-12 pt-10 w-full flex'>
+        <div className='pr-28 pl-10 pt-10 w-full flex'>
           <div className='w-2/3'>
             <div className='px-3 py-1 space-y-3'>
               <h1 className='text-5xl font-bold px-2 border-b-2 border-zinc-600 pb-2'>{post?.title}</h1>
@@ -123,13 +123,13 @@ const Post = () => {
                 comments.map((comment) => (
                   <div className='h-[100px] w-full px-2' key={comment?._id}>
                     <div className='flex items-center space-x-3'>
-                      <img src={comment?.owner.avatar} alt="" className='h-16 rounded-full'/>
+                      <img src={comment?.owner.avatar} alt="" className='h-[10.5vh] w-[5.5vw] rounded-full'/>
                       <div className='w-full pr-10'>
                         <h1 className='text-xl font-semibold'>{comment?.owner.username}</h1>
                         <p className='text-md text-zinc-400 w-[80%]'>{comment?.content}</p>
                       </div>
                       {
-                        userData?.id === comment?.owner.id ? (
+                        userData?.resData?._id === comment?.owner?._id ? (
                           <Button children={"Delete"} className='bg-[#ff3535] px-3' onClick={() => deleteComment(comment?._id)}/>
                         ) : (
                           null
@@ -141,12 +141,12 @@ const Post = () => {
               }
             </div>
           </div>
-          <div className='w-1/3 text-white'>
+          <div className='w-1/3 text-white space-y-5 pl-5'>
+            <h1 className='text-2xl font-semibold'>Related Articles:</h1>
             {
               realtedPosts.map((post) => {
                 return (
-                  <span key={post._id}>
-                    <h1 className='text-2xl font-semibold'>Related Articles:</h1>
+                  <span key={post._id} className=''>
                     <SidePostCard post={post}/>
                   </span>
                 )

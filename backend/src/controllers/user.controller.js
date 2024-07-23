@@ -276,9 +276,9 @@ const updateUserAvatar = asyncHandler( async(req, res) => {
         })
     }
     // delete old avatar
-    if(oldAvatarUrl){
-        await deleteFromCloudinary(oldAvatarUrl)
-    }
+    // if(oldAvatarUrl){
+    //     await deleteFromCloudinary(oldAvatarUrl)
+    // }
 
     const avatar = await uploadOnCloudinary(avatarLocalPath)
     if(!avatar.url){
@@ -309,7 +309,7 @@ const updateUserAvatar = asyncHandler( async(req, res) => {
 
 const updateUserCoverImage = asyncHandler( async(req, res) => {
     const coverImageLocalPath = req.file?.path
-    const oldCoverImageUrl = req.user?.avatar
+    const oldCoverImageUrl = req.user?.coverImage
 
     if(!coverImageLocalPath){
         throw new ApiError({
@@ -318,7 +318,9 @@ const updateUserCoverImage = asyncHandler( async(req, res) => {
         })
     }
     // delete old avatar
-    await deleteFromCloudinary(oldCoverImageUrl)
+    // if(oldCoverImageUrl){
+    //     await deleteFromCloudinary(oldCoverImageUrl)
+    // }
 
     const coverImage = await uploadOnCloudinary(coverImageLocalPath)
     if(!coverImage.url){
@@ -342,7 +344,7 @@ const updateUserCoverImage = asyncHandler( async(req, res) => {
     return res.status(200)
     .json(new ApiResponse({
         status: 200,
-        message: "Avatar Updated Successfully",
+        message: "coverImage Updated Successfully",
         data: user
     }))
 })
