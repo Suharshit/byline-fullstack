@@ -67,23 +67,122 @@ const getTweetById = asyncHandler( async(req, res) => {
     if(!tweetId){
         throw new ApiError(400, "TweetId is required");
     }
-    const tweet = await Tweet.findById(tweetId).sort({ createdAt: -1 })
+    const tweet = await Tweet.aggregate([
+        {
+            $match: {
+                _id: new mongoose.Types.ObjectId(tweetId)
+            }
+        },
+        {
+            $lookup: {
+                from: 'likes',
+                localField: '_id',
+                foreignField: 'tweet',
+                as: 'likes'
+            }
+        },
+        {
+            $lookup: {
+                from: 'comments',
+                localField: '_id',
+                foreignField: 'tweet',
+                as: 'comments'
+            }
+        },
+        {
+            $addFields: {
+                likesCount: { $size: "$likes" },
+                commentsCount: { $size: "$comments" },
+                isLiked: {
+                    $cond: {
+                        if: { $in: [req.user._id, "$likes.user"] },
+                        then: true,
+                        else: false
+                    }
+                }
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                content: 1,
+                owner: 1,
+                createdAt: 1,
+                likesCount: 1,
+                commentsCount:1,
+                isLiked: 1
+            }
+        }
+    ])
+
+    await Tweet.populate(tweet, {
+        path: 'owner',
+        select: 'username avatar fullname'
+    })
     if(!tweet){
         throw new ApiError(400, "Tweet not found");
     }
     return res.status(200)
     .json(
-        new ApiResponse(200, "Tweet found successfully", tweet)
+        new ApiResponse(200, "Tweet found successfully", tweet[0])
     )
 })
 
 const getAllTweets = asyncHandler( async(req, res) => {
     const { page = 1, limit = 10 } = req.query;
-    const tweets = await Tweet.find().sort({
-        createdAt: -1
-    }).limit(limit).skip(
-        (page - 1) * limit
-    )
+    const tweets = await Tweet.aggregate([
+        {
+            $sort: { createdAt: -1 }
+        },
+        {
+            $skip: (page - 1) * limit
+        },
+        {
+            $lookup : {
+                from: "likes",
+                localField: "_id",
+                foreignField: "tweet",
+                as: "likes"
+            }
+        },
+        {
+            $lookup: {
+                from: "comments",
+                localField: "_id",
+                foreignField: "tweet",
+                as: "comments"
+            }
+        },
+        {
+            $addFields: {
+                likesCount: { $size: "$likes" },
+                commentsCount: { $size: "$comments" },
+                isLiked: {
+                    $cond: {
+                        if: { $in: [req.user._id, "$likes.user"] },
+                        then: true,
+                        else: false
+                    }
+                }
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                owner: 1,
+                content: 1,
+                likesCount: 1,
+                commentsCount: 1,
+                isLiked: 1,
+                createdAt: 1
+            }
+        }
+    ])
+
+    await Tweet.populate(tweets, {
+        path: 'owner',
+        select: 'fullname username avatar'
+    })
     if(!tweets){
         throw new ApiError(400, "Tweets not found");
     }
@@ -123,6 +222,11 @@ const getTweetByUsenameOrContent = asyncHandler( async(req, res) => {
     ]).skip(
         (page - 1) * limit
     )
+
+    await Tweet.populate(tweets, {
+        path: "owner",
+        select: "fullname username avatar"
+    })
     if(!tweets){
         throw new ApiError(400, "Tweets not found");
     }

@@ -423,6 +423,23 @@ const getUserProfile = asyncHandler( async(req, res) => {
     )
 })
 
+const searchUsers = asyncHandler( async(req, res) => {
+    const { search } = req.query
+    const users = await User.find({ 
+        $or: [
+            { username: { $regex: search, $options: "i" } },
+            { fullname: { $regex: search, $options: "i" } }
+        ]
+    }).select("-password")
+    if(!users) {
+        throw new ApiError(404, "User not found")
+    }
+    return res.status(200)
+    .json(
+        new ApiResponse(200, "users fetched succesfully", users)
+    )
+})
+
 export { 
     userRegister,
     userLogin,
@@ -433,5 +450,6 @@ export {
     updateAccountDetails,
     updateUserAvatar,
     updateUserCoverImage,
-    getUserProfile
+    getUserProfile,
+    searchUsers
 }

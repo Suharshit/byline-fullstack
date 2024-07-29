@@ -12,7 +12,7 @@ const TextArea = ({
   return (
     <div className='w-full space-y-2'>
       {label && <label htmlFor={id} className='text-lg font-semibold'>{label}</label>}
-      <textarea name="description" id={id} rows={rows} cols={cols} placeholder={placeholder} ref={ref} className={`p-2 rounded-lg w-full outline-gray-800 ${className}`} {...props} maxLength={110}></textarea>
+      <textarea name="description" id={id} rows={rows} cols={cols} placeholder={placeholder} ref={ref} className={`p-2 rounded-lg w-full outline-gray-800 ${className}`} {...props}></textarea>
     </div>
   )
 }

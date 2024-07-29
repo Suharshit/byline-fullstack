@@ -5,7 +5,8 @@ import {
     updateComment,
     deleteComment,
     getPostComments,
-    getTweetComments
+    getTweetComments,
+    createTweetComment
 } from "../controllers/comment.controller.js"
 
 const router = Router()
@@ -13,6 +14,11 @@ const router = Router()
 router.route("/add-comment/:postId").post(
     verifyJWT,
     createComment
+)
+
+router.route("/add-tweet-comment/:tweetId").post(
+    verifyJWT,
+    createTweetComment
 )
 
 router.route("/update-comment/:commentId").post(

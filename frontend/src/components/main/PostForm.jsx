@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import RTE from "../main/editorComp/RTE"
-import { set, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import Input from "../ui/Input"
 import TextArea from '../ui/TextArea'
 import Button from '../ui/Button'
 import { useSelector } from 'react-redux'
 import axios from "axios"
-import { login } from '../../store/authSlice'
 import Select from '../ui/Select'
+import { useNavigate } from 'react-router-dom'
 
 const PostForm = ({post}) => {
+  const navigate = useNavigate()
   const [category, setCategory] = useState([])
   const [image, setImage] = useState({data: "", preveiw: ""})
   const userData = useSelector((state) => state.auth.userData)
@@ -35,6 +36,7 @@ const PostForm = ({post}) => {
         axios.post('/v1/post/add-post', formData).then((res) => {
           console.log(res)
         })
+        navigate("/")
       } else {
         const formData = new FormData()
         formData.append("title", data.title)
@@ -45,8 +47,9 @@ const PostForm = ({post}) => {
         axios.patch(`/v1/post/update-post/${post?._id}`, formData).then((res) => {
           console.log(res)
         })
-        
+        navigate(`/article/${post?._id}`)
       }
+      navigate("/")
     }
     const handleFileChange = (e) => {
       const file = {

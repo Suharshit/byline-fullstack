@@ -8,9 +8,9 @@ const HomePostCard = ({
     id,
     title = "Default title",
     description = "Default description",
-    image = "https://i.pinimg.com/564x/72/45/41/7245411a2341b13ee3cf6b1d9fb7e927.jpg",
+    image = "https://i.pinimg.com/236x/d3/1d/5d/d31d5d8cc761e74161968ebff8fa13a2.jpg",
     author = "Suharshit Singh",
-    avatar = "https://i.pinimg.com/236x/7d/2d/c5/7d2dc513fc506bd9ad6cf3847b7326c2.jpg",
+    avatar = "",
     authorId,
 }) => {
   const userData = useSelector((state) => state.auth.userData)

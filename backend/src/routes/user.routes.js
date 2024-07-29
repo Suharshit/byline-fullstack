@@ -11,7 +11,8 @@ import {
     updateAccountDetails,
     updateUserAvatar,
     updateUserCoverImage,
-    getUserProfile
+    getUserProfile,
+    searchUsers
 } from "../controllers/user.controller.js"
 
 const router = Router()
@@ -74,6 +75,11 @@ router.route("/cover-image").patch(
 router.route("/profile/:username").get(
     verifyJWT,
     getUserProfile
+)
+
+router.route("/search-user").get(
+    verifyJWT,
+    searchUsers
 )
 
 export default router

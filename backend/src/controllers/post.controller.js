@@ -124,7 +124,10 @@ const getPostById = asyncHandler( async(req, res) => {
 
 const seachPosts = asyncHandler( async(req, res) => {
     const { search } = req.query;
-    const posts = await Post.find({ title: { $regex: search, $options: "i"}})
+    const posts = await Post.find({ title: { $regex: search, $options: "i"}}).populate({
+        path: "author",
+        select: "username avatar"
+    })
     if(!posts){
         throw new ApiError(404, "No posts found")
     }

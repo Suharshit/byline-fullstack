@@ -2,6 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { Comment } from "../modals/comment.modal.js"
+import mongoose from "mongoose";
 
 const createComment = asyncHandler( async(req, res) => {
     const { content } = req.body;
@@ -12,6 +13,26 @@ const createComment = asyncHandler( async(req, res) => {
     const comment = await Comment.create({
         content: content,
         post: postId,
+        owner: req.user._id
+    })
+    if(!comment){
+        throw new ApiError(400, "Comment not created")
+    }
+    return res.status(200)
+    .json(
+        new ApiResponse(200, "Comment created successfully", comment)
+    )
+})
+
+const createTweetComment = asyncHandler( async(req, res) => {
+    const { content } = req.body;
+    const { tweetId } = req.params;
+    if(!content || !tweetId){
+        throw new ApiError(400, "Please provide all the required fields")
+    }
+    const comment = await Comment.create({
+        content: content,
+        tweet: tweetId,
         owner: req.user._id
     })
     if(!comment){
@@ -92,7 +113,7 @@ const getTweetComments = asyncHandler( async(req, res) => {
     const comments = await Comment.find({
         tweet: tweetId
     }).populate({
-        path: "user",
+        path: "owner",
         select: "username fullname avatar email"
     })
     if(!comments){
@@ -109,5 +130,6 @@ export {
     updateComment,
     deleteComment,
     getPostComments,
-    getTweetComments
+    getTweetComments,
+    createTweetComment
 }

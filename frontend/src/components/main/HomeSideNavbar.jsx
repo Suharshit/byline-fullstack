@@ -33,7 +33,7 @@ const HomeSideNavbar = ({navItems}) => {
                       following.map((user) => (
                         <Link to={`/profile/${user?.author?.username}`} key={user._id} className=''>
                           <div className='flex items-center pt-2 pb-1 space-x-3'>
-                            <img src={user?.author?.avatar} alt={user?.author?.username} className='h-12 rounded-full' />
+                            <img src={user?.author?.avatar} alt={user?.author?.username} className='h-[8vh] w-[3.8vw] rounded-full' />
                             <h1 className='text-lg font-semibold'>{user?.author?.username}</h1>
                             {/* <p>{user?.author}</p> */}
                           </div>

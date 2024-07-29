@@ -28,10 +28,12 @@ router.route("/delete-tweet/:tweetId").get(
 )
 
 router.route("/tweet/:tweetId").get(
+    verifyJWT,
     getTweetById
 )
 
 router.route("/all-tweets").get(
+    verifyJWT,
     getAllTweets
 )
 

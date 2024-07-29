@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import PostForm from '../components/main/PostForm'
 import axios from "axios"
+import Button from '../components/ui/Button'
+import { CaretLeftIcon } from "@radix-ui/react-icons"
 
 const EditPost = () => {
     const { id } = useParams()
@@ -20,8 +22,11 @@ const EditPost = () => {
     
   return !loading ? (
     <>
-        <div className='px-8 py-5'>
-            <PostForm post={post} />
+        <div className='px-8 py-5 flex space-x-5'>
+          <div className='rounded-full bg-zinc-900 h-fit w-fit p-3'>
+            <Link to={"/"} className=''><CaretLeftIcon height={45} width={45}/></Link>
+          </div>
+          <PostForm post={post} />
         </div>
     </>
   ) : (
